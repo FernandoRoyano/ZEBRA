@@ -5,6 +5,15 @@ import { Button, Card } from '@/components/ui'
 import DeleteButton from './DeleteButton'
 import ChangeSociedadButton from './ChangeSociedadButton'
 
+interface LineaFactura {
+  id: number
+  descripcion: string
+  cantidad: number
+  precioUnitario: number
+  porcentajeIva: number
+  subtotal: number
+}
+
 async function getFactura(id: number) {
   return prisma.factura.findUnique({
     where: { id },
@@ -189,7 +198,7 @@ export default async function FacturaDetallePage({
               </tr>
             </thead>
             <tbody>
-              {factura.lineas.map((linea) => (
+              {factura.lineas.map((linea: LineaFactura) => (
                 <tr key={linea.id} className="border-b border-zebra-light">
                   <td className="py-3">{linea.descripcion}</td>
                   <td className="py-3 text-right">{linea.cantidad}</td>
