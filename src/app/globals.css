@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
+/* Colores de Zebra Publicidad */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --zebra-primary: #009680;
+  --zebra-primary-dark: #007a68;
+  --zebra-primary-light: #00b89c;
+  --zebra-dark: #0a0a0a;
+  --zebra-gray: #626262;
+  --zebra-light: #f4f4f4;
+  --zebra-white: #ffffff;
+  --zebra-border: #EBEBEB;
+  --background: #f4f4f4;
+  --foreground: #0a0a0a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-zebra-primary: var(--zebra-primary);
+  --color-zebra-primary-dark: var(--zebra-primary-dark);
+  --color-zebra-primary-light: var(--zebra-primary-light);
+  --color-zebra-dark: var(--zebra-dark);
+  --color-zebra-gray: var(--zebra-gray);
+  --color-zebra-light: var(--zebra-light);
+  --color-zebra-white: var(--zebra-white);
+  --color-zebra-border: var(--zebra-border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Estilos para inputs de fecha en navegadores */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Scrollbar personalizado con colores Zebra */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--zebra-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zebra-primary);
+}
+
+/* Selección de texto con color Zebra */
+::selection {
+  background: var(--zebra-primary);
+  color: white;
 }
