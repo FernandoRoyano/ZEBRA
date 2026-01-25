@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Input, Card } from '@/components/ui'
 import { actualizarSociedad } from './actions'
+import LogoUploader from './LogoUploader'
 
 interface Sociedad {
   id: number
@@ -17,6 +18,7 @@ interface Sociedad {
   telefono: string | null
   email: string | null
   iban: string | null
+  logoUrl: string | null
   serieActual: string
   activa: boolean
 }
@@ -25,6 +27,7 @@ export default function SociedadForm({ sociedad }: { sociedad: Sociedad }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [logoUrl, setLogoUrl] = useState<string | null>(sociedad.logoUrl)
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -134,6 +137,9 @@ export default function SociedadForm({ sociedad }: { sociedad: Sociedad }) {
           required
           helpText="Letra o código que precede al número de factura"
         />
+
+        <LogoUploader currentLogo={logoUrl} onLogoChange={setLogoUrl} />
+        <input type="hidden" name="logoUrl" value={logoUrl || ''} />
 
         <div className="flex items-center gap-3">
           <input

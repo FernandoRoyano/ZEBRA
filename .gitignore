@@ -50,3 +50,9 @@ prisma/*.db
 
 # Claude
 .claude/
+
+# Logos subidos (datos de usuario)
+public/logos/
+
+# Windows temp files
+nul

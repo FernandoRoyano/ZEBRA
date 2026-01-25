@@ -18,6 +18,7 @@ export async function actualizarSociedad(id: number, formData: FormData) {
         telefono: formData.get('telefono') as string || null,
         email: formData.get('email') as string || null,
         iban: formData.get('iban') as string || null,
+        logoUrl: formData.get('logoUrl') as string || null,
         serieActual: formData.get('serieActual') as string,
         activa: formData.get('activa') === 'on',
       },

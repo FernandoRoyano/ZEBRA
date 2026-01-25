@@ -1,4 +1,6 @@
 import type { TDocumentDefinitions, Content, TableCell } from 'pdfmake/interfaces'
+import { readFile } from 'fs/promises'
+import path from 'path'
 
 interface Sociedad {
   nombre: string
@@ -11,6 +13,7 @@ interface Sociedad {
   telefono: string | null
   email: string | null
   iban: string | null
+  logoUrl: string | null
 }
 
 interface Cliente {
@@ -43,15 +46,7 @@ interface FacturaData {
   lineas: LineaFactura[]
 }
 
-// Definir fuentes (usar las fuentes estándar)
-const fonts = {
-  Helvetica: {
-    normal: 'Helvetica',
-    bold: 'Helvetica-Bold',
-    italics: 'Helvetica-Oblique',
-    bolditalics: 'Helvetica-BoldOblique',
-  },
-}
+// Las fuentes se configuran dentro de generarFacturaPDF usando Buffers
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('es-ES', {
@@ -68,25 +63,63 @@ function formatDate(date: Date): string {
   }).format(new Date(date))
 }
 
+async function loadImageAsBase64(logoUrl: string | null): Promise<string | null> {
+  if (!logoUrl) return null
+
+  try {
+    const filePath = path.join(process.cwd(), 'public', logoUrl)
+    const buffer = await readFile(filePath)
+    const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
+    const mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+    return `data:${mimeType};base64,${buffer.toString('base64')}`
+  } catch {
+    console.warn('No se pudo cargar el logo:', logoUrl)
+    return null
+  }
+}
+
 export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
-  // Usar require para pdfmake (funciona mejor en Node.js server-side)
+  // pdfmake 0.2.x - importar y configurar fuentes como Buffers
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const PdfPrinter = require('pdfmake/js/Printer').default
+  const PdfPrinter = require('pdfmake')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const vfsFonts = require('pdfmake/build/vfs_fonts')
+
+  // Convertir fuentes de base64 a Buffer para Node.js
+  const fonts = {
+    Roboto: {
+      normal: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-Regular.ttf'], 'base64'),
+      bold: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-Medium.ttf'], 'base64'),
+      italics: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-Italic.ttf'], 'base64'),
+      bolditalics: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-MediumItalic.ttf'], 'base64'),
+    },
+  }
+
   const printer = new PdfPrinter(fonts)
 
   const nombreEmisor = factura.sociedad.nombreComercial || factura.sociedad.nombre
+  const logoBase64 = await loadImageAsBase64(factura.sociedad.logoUrl)
 
   const docDefinition: TDocumentDefinitions = {
     pageSize: 'A4',
     pageMargins: [40, 40, 40, 60],
     defaultStyle: {
-      font: 'Helvetica',
+      font: 'Roboto',
       fontSize: 10,
     },
     content: [
       // Cabecera con datos del emisor
       {
         columns: [
+          // Logo (si existe)
+          logoBase64
+            ? {
+                image: logoBase64,
+                width: 70,
+                margin: [0, 0, 15, 0] as [number, number, number, number],
+              }
+            : { text: '', width: 0 },
+          // Datos empresa
           {
             width: '*',
             stack: [
@@ -105,6 +138,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
                 : '',
             ].filter(Boolean) as Content[],
           },
+          // Número factura
           {
             width: 200,
             stack: [
@@ -361,7 +395,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
       },
       ibanText: {
         fontSize: 11,
-        font: 'Helvetica',
+        font: 'Roboto',
         color: '#1f2937',
       },
     },
