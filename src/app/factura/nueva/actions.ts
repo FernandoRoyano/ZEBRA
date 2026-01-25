@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
 interface LineaFacturaInput {
@@ -52,7 +53,7 @@ export async function crearFactura(input: CrearFacturaInput) {
     fechaVencimiento.setDate(fechaVencimiento.getDate() + input.diasPago)
 
     // Crear factura con transacción
-    const factura = await prisma.$transaction(async (tx) => {
+    const factura = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Crear factura
       const nuevaFactura = await tx.factura.create({
         data: {
