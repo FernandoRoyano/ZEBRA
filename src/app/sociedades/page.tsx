@@ -18,6 +18,14 @@ export default async function SociedadesPage() {
           <h1 className="text-3xl font-bold text-zebra-dark">Sociedades</h1>
           <p className="text-zebra-gray mt-1">Gestiona los datos fiscales de tus empresas</p>
         </div>
+        <Link href="/sociedades/nuevo">
+          <Button>
+            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Nueva Sociedad
+          </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

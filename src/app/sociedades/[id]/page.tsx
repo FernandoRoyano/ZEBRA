@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
-import SociedadForm from './SociedadForm'
+import SociedadForm from '../SociedadForm'
 import DeleteSociedadButton from './DeleteButton'
 
 async function getSociedad(id: number) {
