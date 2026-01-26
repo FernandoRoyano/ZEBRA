@@ -24,20 +24,39 @@ export default async function SociedadesPage() {
         {sociedades.map((sociedad) => (
           <Link key={sociedad.id} href={`/sociedades/${sociedad.id}`}>
             <Card clickable className="h-full">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-zebra-dark">
-                    {sociedad.nombreComercial || sociedad.nombre}
-                  </h3>
-                  <p className="text-sm text-zebra-gray mt-1">{sociedad.nombre}</p>
+              <div className="flex items-start gap-4">
+                {/* Logo */}
+                {sociedad.logoUrl ? (
+                  <img
+                    src={sociedad.logoUrl}
+                    alt={`Logo ${sociedad.nombre}`}
+                    className="w-16 h-16 object-contain rounded border border-zebra-light flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-16 h-16 bg-zebra-light rounded flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-zebra-gray">
+                      {(sociedad.nombreComercial || sociedad.nombre).charAt(0)}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-zebra-dark">
+                        {sociedad.nombreComercial || sociedad.nombre}
+                      </h3>
+                      <p className="text-sm text-zebra-gray mt-1">{sociedad.nombre}</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      sociedad.activa
+                        ? 'bg-zebra-primary/10 text-zebra-primary-dark'
+                        : 'bg-zebra-light text-zebra-gray'
+                    }`}>
+                      {sociedad.activa ? 'Activa' : 'Inactiva'}
+                    </span>
+                  </div>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  sociedad.activa
-                    ? 'bg-zebra-primary/10 text-zebra-primary-dark'
-                    : 'bg-zebra-light text-zebra-gray'
-                }`}>
-                  {sociedad.activa ? 'Activa' : 'Inactiva'}
-                </span>
               </div>
 
               <div className="mt-4 space-y-2 text-sm text-zebra-gray">

@@ -67,7 +67,9 @@ async function loadImageAsBase64(logoUrl: string | null): Promise<string | null>
   if (!logoUrl) return null
 
   try {
-    const filePath = path.join(process.cwd(), 'public', logoUrl)
+    // Quitar el "/" inicial si existe para que path.join funcione correctamente
+    const cleanLogoUrl = logoUrl.startsWith('/') ? logoUrl.slice(1) : logoUrl
+    const filePath = path.join(process.cwd(), 'public', cleanLogoUrl)
     const buffer = await readFile(filePath)
     const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
     const mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
