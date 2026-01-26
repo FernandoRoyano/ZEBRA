@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const menuItems = [
   {
@@ -54,6 +55,20 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const [loggingOut, setLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setLoggingOut(true)
+    try {
+      await fetch('/api/auth', { method: 'DELETE' })
+      router.push('/login')
+      router.refresh()
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+      setLoggingOut(false)
+    }
+  }
 
   return (
     <aside className="hidden lg:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-zebra-border flex-col z-50">
@@ -92,7 +107,17 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-zebra-border">
+      <div className="p-4 border-t border-zebra-border space-y-3">
+        <button
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-zebra-gray hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          {loggingOut ? 'Saliendo...' : 'Cerrar sesión'}
+        </button>
         <p className="text-xs text-zebra-gray text-center">
           ZEBRA v1.0
         </p>
