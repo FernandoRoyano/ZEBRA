@@ -67,15 +67,38 @@ async function loadImageAsBase64(logoUrl: string | null): Promise<string | null>
   if (!logoUrl) return null
 
   try {
-    // Quitar el "/" inicial si existe para que path.join funcione correctamente
-    const cleanLogoUrl = logoUrl.startsWith('/') ? logoUrl.slice(1) : logoUrl
-    const filePath = path.join(process.cwd(), 'public', cleanLogoUrl)
-    const buffer = await readFile(filePath)
-    const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
-    const mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+    let buffer: Buffer
+    let mimeType: string
+
+    // Verificar si es una URL externa (Vercel Blob u otra)
+    if (logoUrl.startsWith('http://') || logoUrl.startsWith('https://')) {
+      const response = await fetch(logoUrl)
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`)
+      }
+      const arrayBuffer = await response.arrayBuffer()
+      buffer = Buffer.from(arrayBuffer)
+
+      // Obtener el tipo MIME del header o inferirlo de la URL
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.startsWith('image/')) {
+        mimeType = contentType.split(';')[0]
+      } else {
+        const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
+        mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+      }
+    } else {
+      // Archivo local: quitar el "/" inicial si existe
+      const cleanLogoUrl = logoUrl.startsWith('/') ? logoUrl.slice(1) : logoUrl
+      const filePath = path.join(process.cwd(), 'public', cleanLogoUrl)
+      buffer = await readFile(filePath)
+      const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
+      mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+    }
+
     return `data:${mimeType};base64,${buffer.toString('base64')}`
-  } catch {
-    console.warn('No se pudo cargar el logo:', logoUrl)
+  } catch (error) {
+    console.warn('No se pudo cargar el logo:', logoUrl, error)
     return null
   }
 }

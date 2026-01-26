@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { put } from '@vercel/blob'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validar tamaño (máximo 5MB)
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: 'El archivo es demasiado grande. Máximo 5MB.' },
@@ -29,22 +28,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Crear directorio si no existe
-    const uploadDir = path.join(process.cwd(), 'public', 'logos')
-    await mkdir(uploadDir, { recursive: true })
-
-    // Generar nombre único basado en timestamp
-    const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
-    const fileName = `logo-${Date.now()}.${ext}`
-    const filePath = path.join(uploadDir, fileName)
-
-    // Guardar archivo
-    const bytes = await file.arrayBuffer()
-    await writeFile(filePath, Buffer.from(bytes))
+    // Subir a Vercel Blob
+    const blob = await put(`logos/${Date.now()}-${file.name}`, file, {
+      access: 'public',
+    })
 
     return NextResponse.json({
       success: true,
-      url: `/logos/${fileName}`
+      url: blob.url
     })
   } catch (error) {
     console.error('Error uploading file:', error)
