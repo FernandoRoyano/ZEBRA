@@ -33,10 +33,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           id={selectId}
           className={`
             w-full px-4 py-3 text-base
-            border-2 rounded-lg
+            border rounded-lg
             bg-white
-            transition-colors
-            focus:outline-none focus:ring-2 focus:ring-zebra-primary focus:border-zebra-primary
+            transition-all duration-200
+            focus:outline-none focus:ring-2 focus:ring-zebra-primary focus:border-zebra-primary focus:shadow-md focus:shadow-zebra-primary/10
             disabled:bg-zebra-light disabled:cursor-not-allowed
             ${error ? 'border-red-500' : 'border-zebra-border'}
             ${className}

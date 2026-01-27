@@ -10,13 +10,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', fullWidth = false, children, disabled, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0'
 
     const variants = {
-      primary: 'bg-zebra-primary text-white hover:bg-zebra-primary-dark focus:ring-zebra-primary',
-      secondary: 'bg-zebra-light text-zebra-dark hover:bg-zebra-border focus:ring-zebra-gray',
-      outline: 'border-2 border-zebra-border text-zebra-dark hover:bg-zebra-light focus:ring-zebra-primary',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+      primary: 'bg-zebra-primary text-white hover:bg-zebra-primary-dark hover:-translate-y-0.5 focus:ring-zebra-primary shadow-md shadow-zebra-primary/25 hover:shadow-lg hover:shadow-zebra-primary/30',
+      secondary: 'bg-zebra-light text-zebra-dark hover:bg-zebra-border hover:-translate-y-0.5 focus:ring-zebra-gray shadow-sm',
+      outline: 'border border-zebra-border text-zebra-dark hover:bg-zebra-light hover:border-zebra-gray focus:ring-zebra-primary',
+      danger: 'bg-red-600 text-white hover:bg-red-700 hover:-translate-y-0.5 focus:ring-red-500 shadow-md shadow-red-500/25 hover:shadow-lg hover:shadow-red-500/30',
     }
 
     const sizes = {

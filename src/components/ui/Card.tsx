@@ -9,14 +9,14 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', selected = false, clickable = false, children, ...props }, ref) => {
-    const baseStyles = 'bg-white rounded-xl border-2 p-6 transition-all'
+    const baseStyles = 'bg-white rounded-xl border p-6 shadow-sm transition-all duration-200'
 
     const interactiveStyles = clickable
-      ? 'cursor-pointer hover:shadow-lg hover:border-zebra-primary-light'
+      ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5 hover:border-zebra-primary-light'
       : ''
 
     const selectedStyles = selected
-      ? 'border-zebra-primary ring-2 ring-zebra-primary/20 shadow-lg'
+      ? 'border-zebra-primary ring-2 ring-zebra-primary/20 shadow-md'
       : 'border-zebra-border'
 
     return (

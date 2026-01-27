@@ -9,8 +9,9 @@
   --zebra-gray: #626262;
   --zebra-light: #f4f4f4;
   --zebra-white: #ffffff;
-  --zebra-border: #EBEBEB;
-  --background: #f4f4f4;
+  --zebra-border: #e2e4e9;
+  --zebra-accent: #f59e0b;
+  --background: #f8f9fb;
   --foreground: #0a0a0a;
 }
 
@@ -23,6 +24,7 @@
   --color-zebra-light: var(--zebra-light);
   --color-zebra-white: var(--zebra-white);
   --color-zebra-border: var(--zebra-border);
+  --color-zebra-accent: var(--zebra-accent);
 }
 
 body {
@@ -49,6 +51,7 @@ input[type="date"] {
 ::-webkit-scrollbar-thumb {
   background: #c0c0c0;
   border-radius: 4px;
+  transition: background 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {

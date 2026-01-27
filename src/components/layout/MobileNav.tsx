@@ -23,7 +23,7 @@ export default function MobileNav() {
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zebra-border z-50">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zebra-border z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
       <nav className="flex justify-around items-center py-2">
         {menuItems.map((item) => {
           const isActive = pathname === item.href
@@ -35,9 +35,9 @@ export default function MobileNav() {
               href={item.href}
               className={`
                 flex flex-col items-center px-3 py-2 rounded-lg text-xs font-medium
-                transition-colors min-w-[60px]
+                transition-all duration-200 min-w-[60px]
                 ${isActive
-                  ? 'text-zebra-primary'
+                  ? 'text-zebra-primary font-semibold'
                   : isHighlight
                     ? 'text-zebra-primary font-bold'
                     : 'text-zebra-gray'

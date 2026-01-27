@@ -97,25 +97,25 @@ export default async function HomePage() {
 
       {/* Estadísticas rápidas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="border-l-4 border-l-zebra-primary">
           <div className="text-center">
             <p className="text-4xl font-bold text-zebra-primary">{stats.totalFacturas}</p>
             <p className="text-zebra-gray mt-1">Facturas totales</p>
           </div>
         </Card>
-        <Card>
+        <Card className="border-l-4 border-l-zebra-primary-light">
           <div className="text-center">
             <p className="text-4xl font-bold text-zebra-primary-light">{stats.facturasEsteMes}</p>
             <p className="text-zebra-gray mt-1">Este mes</p>
           </div>
         </Card>
-        <Card>
+        <Card className="border-l-4 border-l-zebra-primary-dark">
           <div className="text-center">
             <p className="text-4xl font-bold text-zebra-primary-dark">{stats.totalClientes}</p>
             <p className="text-zebra-gray mt-1">Clientes</p>
           </div>
         </Card>
-        <Card className="bg-zebra-primary text-white">
+        <Card className="bg-gradient-to-br from-zebra-primary to-zebra-primary-dark text-white border-none">
           <div className="text-center">
             <p className="text-3xl font-bold">
               {stats.facturacionTotal.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
@@ -189,7 +189,7 @@ export default async function HomePage() {
         {ultimasFacturas.length === 0 ? (
           <Card>
             <div className="text-center py-8">
-              <svg className="w-16 h-16 text-zebra-border mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-16 h-16 text-zebra-gray/40 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <p className="text-zebra-gray text-lg">No hay facturas todavía</p>
@@ -197,7 +197,7 @@ export default async function HomePage() {
             </div>
           </Card>
         ) : (
-          <div className="bg-white rounded-xl border border-zebra-border overflow-hidden">
+          <div className="bg-white rounded-xl border border-zebra-border overflow-hidden shadow-sm">
             <table className="min-w-full divide-y divide-zebra-border">
               <thead className="bg-zebra-light">
                 <tr>
@@ -210,7 +210,7 @@ export default async function HomePage() {
               </thead>
               <tbody className="divide-y divide-zebra-border">
                 {ultimasFacturas.map((factura) => (
-                  <tr key={factura.id} className="hover:bg-zebra-light/50">
+                  <tr key={factura.id} className="hover:bg-zebra-primary/5 transition-colors">
                     <td className="px-6 py-4 font-medium text-zebra-dark">{factura.numeroCompleto}</td>
                     <td className="px-6 py-4 text-zebra-gray">{factura.cliente.nombre}</td>
                     <td className="px-6 py-4 text-zebra-gray">{factura.sociedad.nombreComercial}</td>

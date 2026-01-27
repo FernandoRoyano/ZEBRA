@@ -55,7 +55,7 @@ export default function BorradoresList({ borradores }: Props) {
       <Card>
         <div className="text-center py-12">
           <svg
-            className="w-16 h-16 text-zebra-border mx-auto mb-4"
+            className="w-16 h-16 text-zebra-gray/40 mx-auto mb-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -91,7 +91,7 @@ export default function BorradoresList({ borradores }: Props) {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3">
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-zebra-light text-zebra-gray">
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-amber-50 text-amber-700 border border-amber-200">
                     Borrador
                   </span>
                   <span className="text-sm text-zebra-gray">

@@ -56,11 +56,11 @@ export default function FacturasList({ facturas, sociedades }: Props) {
   })
 
   const estadoStyles: Record<string, string> = {
-    BORRADOR: 'bg-zebra-light text-zebra-gray',
-    EMITIDA: 'bg-blue-100 text-blue-700',
-    ENVIADA: 'bg-yellow-100 text-yellow-700',
-    PAGADA: 'bg-zebra-primary/10 text-zebra-primary-dark',
-    ANULADA: 'bg-red-100 text-red-700',
+    BORRADOR: 'bg-zebra-light text-zebra-gray border border-zebra-border',
+    EMITIDA: 'bg-blue-50 text-blue-700 border border-blue-200',
+    ENVIADA: 'bg-yellow-50 text-yellow-700 border border-yellow-200',
+    PAGADA: 'bg-zebra-primary/10 text-zebra-primary-dark border border-zebra-primary/20',
+    ANULADA: 'bg-red-50 text-red-700 border border-red-200',
   }
 
   const estadoLabels: Record<string, string> = {
@@ -115,7 +115,7 @@ export default function FacturasList({ facturas, sociedades }: Props) {
         <Card>
           <div className="text-center py-12">
             <svg
-              className="w-16 h-16 text-zebra-border mx-auto mb-4"
+              className="w-16 h-16 text-zebra-gray/40 mx-auto mb-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -135,7 +135,7 @@ export default function FacturasList({ facturas, sociedades }: Props) {
           </div>
         </Card>
       ) : (
-        <div className="bg-white rounded-xl border border-zebra-border overflow-hidden">
+        <div className="bg-white rounded-xl border border-zebra-border overflow-hidden shadow-sm">
           <table className="min-w-full divide-y divide-zebra-border">
             <thead className="bg-zebra-light">
               <tr>
@@ -164,7 +164,7 @@ export default function FacturasList({ facturas, sociedades }: Props) {
             </thead>
             <tbody className="divide-y divide-zebra-border">
               {facturasFiltradas.map((factura) => (
-                <tr key={factura.id} className="hover:bg-zebra-light/50">
+                <tr key={factura.id} className="hover:bg-zebra-primary/5 transition-colors">
                   <td className="px-6 py-4">
                     <Link
                       href={`/factura/${factura.id}`}

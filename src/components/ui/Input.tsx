@@ -26,10 +26,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={`
-            w-full px-4 py-3 text-base
-            border-2 rounded-lg
-            transition-colors
-            focus:outline-none focus:ring-2 focus:ring-zebra-primary focus:border-zebra-primary
+            w-full px-4 py-3 text-base bg-white
+            border rounded-lg
+            transition-all duration-200
+            focus:outline-none focus:ring-2 focus:ring-zebra-primary focus:border-zebra-primary focus:shadow-md focus:shadow-zebra-primary/10
             disabled:bg-zebra-light disabled:cursor-not-allowed
             ${error ? 'border-red-500' : 'border-zebra-border'}
             ${className}

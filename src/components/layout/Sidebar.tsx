@@ -80,11 +80,11 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="hidden lg:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-zebra-border flex-col z-50">
+    <aside className="hidden lg:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-zebra-border flex-col z-50 shadow-lg">
       {/* Logo */}
-      <div className="p-6 border-b border-zebra-border">
-        <h1 className="text-2xl font-bold text-zebra-primary">ZEBRA</h1>
-        <p className="text-sm text-zebra-gray">Facturación</p>
+      <div className="p-6 bg-gradient-to-r from-zebra-primary to-zebra-primary-light">
+        <h1 className="text-2xl font-bold text-white">ZEBRA</h1>
+        <p className="text-sm text-white/70">Facturación</p>
       </div>
 
       {/* Menu */}
@@ -99,11 +99,11 @@ export default function Sidebar() {
               href={item.href}
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium
-                transition-colors
+                transition-all duration-200
                 ${isHighlight
-                  ? 'bg-zebra-primary text-white hover:bg-zebra-primary-dark'
+                  ? 'bg-zebra-primary text-white hover:bg-zebra-primary-dark shadow-md shadow-zebra-primary/25'
                   : isActive
-                    ? 'bg-zebra-primary/10 text-zebra-primary'
+                    ? 'bg-zebra-primary/15 text-zebra-primary shadow-sm'
                     : 'text-zebra-dark hover:bg-zebra-light'
                 }
               `}

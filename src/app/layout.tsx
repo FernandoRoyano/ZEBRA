@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${montserrat.className} antialiased bg-zebra-light`}>
         {/* Header móvil */}
-        <header className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-zebra-border z-50 px-4 py-3">
+        <header className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-zebra-border z-50 px-4 py-3 shadow-sm">
           <h1 className="text-xl font-bold text-zebra-primary">ZEBRA</h1>
         </header>
 
