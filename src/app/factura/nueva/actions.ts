@@ -18,6 +18,7 @@ interface CrearFacturaInput {
   diasPago: number
   notas: string | null
   lineas: LineaFacturaInput[]
+  comoBorrador?: boolean
 }
 
 export async function crearFactura(input: CrearFacturaInput) {
@@ -30,11 +31,6 @@ export async function crearFactura(input: CrearFacturaInput) {
     if (!sociedad) {
       return { success: false, error: 'Sociedad no encontrada' }
     }
-
-    // Calcular número de factura
-    const nuevoNumero = sociedad.ultimoNumero + 1
-    const año = input.fechaEmision.getFullYear()
-    const numeroCompleto = `${sociedad.serieActual}-${año}-${String(nuevoNumero).padStart(4, '0')}`
 
     // Calcular totales
     const baseImponible = input.lineas.reduce(
@@ -52,9 +48,58 @@ export async function crearFactura(input: CrearFacturaInput) {
     const fechaVencimiento = new Date(input.fechaEmision)
     fechaVencimiento.setDate(fechaVencimiento.getDate() + input.diasPago)
 
-    // Crear factura con transacción
+    const lineasData = input.lineas.map((linea, index) => ({
+      descripcion: linea.descripcion,
+      cantidad: linea.cantidad,
+      precioUnitario: linea.precioUnitario,
+      porcentajeIva: linea.porcentajeIva,
+      subtotal: linea.cantidad * linea.precioUnitario,
+      orden: index + 1,
+    }))
+
+    if (input.comoBorrador) {
+      // Crear como borrador: sin número secuencial
+      const factura = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+        const nuevaFactura = await tx.factura.create({
+          data: {
+            numero: '0',
+            serie: sociedad.serieActual,
+            numeroCompleto: `BORRADOR-TEMP-${Date.now()}`,
+            fechaEmision: input.fechaEmision,
+            fechaVencimiento,
+            estado: 'BORRADOR',
+            baseImponible,
+            totalIva,
+            totalFactura,
+            notas: input.notas,
+            diasPago: input.diasPago,
+            sociedadId: input.sociedadId,
+            clienteId: input.clienteId,
+            lineas: { create: lineasData },
+          },
+        })
+
+        await tx.factura.update({
+          where: { id: nuevaFactura.id },
+          data: { numeroCompleto: `BORRADOR-${nuevaFactura.id}` },
+        })
+
+        return nuevaFactura
+      })
+
+      revalidatePath('/')
+      revalidatePath('/facturas')
+      revalidatePath('/borradores')
+
+      return { success: true, facturaId: factura.id }
+    }
+
+    // Crear como emitida: con número secuencial
+    const nuevoNumero = sociedad.ultimoNumero + 1
+    const año = input.fechaEmision.getFullYear()
+    const numeroCompleto = `${sociedad.serieActual}-${año}-${String(nuevoNumero).padStart(4, '0')}`
+
     const factura = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-      // Crear factura
       const nuevaFactura = await tx.factura.create({
         data: {
           numero: String(nuevoNumero),
@@ -70,20 +115,10 @@ export async function crearFactura(input: CrearFacturaInput) {
           diasPago: input.diasPago,
           sociedadId: input.sociedadId,
           clienteId: input.clienteId,
-          lineas: {
-            create: input.lineas.map((linea, index) => ({
-              descripcion: linea.descripcion,
-              cantidad: linea.cantidad,
-              precioUnitario: linea.precioUnitario,
-              porcentajeIva: linea.porcentajeIva,
-              subtotal: linea.cantidad * linea.precioUnitario,
-              orden: index + 1,
-            })),
-          },
+          lineas: { create: lineasData },
         },
       })
 
-      // Actualizar número de factura en sociedad
       await tx.sociedad.update({
         where: { id: input.sociedadId },
         data: { ultimoNumero: nuevoNumero },

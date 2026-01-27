@@ -3,6 +3,7 @@ import FacturasList from './FacturasList'
 
 async function getFacturas() {
   return prisma.factura.findMany({
+    where: { estado: { not: 'BORRADOR' } },
     orderBy: { createdAt: 'desc' },
     include: {
       cliente: { select: { nombre: true } },

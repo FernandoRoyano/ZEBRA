@@ -7,7 +7,7 @@ const publicPaths = ['/login', '/api/auth']
 // Rutas estáticas y de sistema que no deben ser interceptadas
 const ignorePaths = ['/_next', '/favicon.ico', '/logos']
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Ignorar rutas estáticas y de sistema
@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
-  // Validar el token (verificación básica en Edge Runtime)
+  // Validar el token
   try {
     const decoded = atob(sessionToken)
     const [timestampStr, secret] = decoded.split(':')

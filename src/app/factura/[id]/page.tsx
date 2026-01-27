@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { Button, Card } from '@/components/ui'
 import DeleteButton from './DeleteButton'
 import ChangeSociedadButton from './ChangeSociedadButton'
+import EmitirButton from './EmitirButton'
 
 interface LineaFactura {
   id: number
@@ -61,30 +62,45 @@ export default async function FacturaDetallePage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-zebra-dark">
-            Factura {factura.numeroCompleto}
+            {factura.estado === 'BORRADOR'
+              ? 'Borrador'
+              : `Factura ${factura.numeroCompleto}`}
           </h1>
           <p className="text-zebra-gray mt-1">
-            Emitida el {new Date(factura.fechaEmision).toLocaleDateString('es-ES')}
+            {factura.estado === 'BORRADOR'
+              ? `Creado el ${new Date(factura.createdAt).toLocaleDateString('es-ES')}`
+              : `Emitida el ${new Date(factura.fechaEmision).toLocaleDateString('es-ES')}`}
           </p>
         </div>
         <div className="flex gap-3">
-          <Link href={`/api/factura/${factura.id}/pdf`} target="_blank">
-            <Button>
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Descargar PDF
-            </Button>
-          </Link>
-          {factura.cliente.esAdministracion && (
-            <Link href={`/api/factura/${factura.id}/xml`} target="_blank">
-              <Button variant="outline">
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-                Descargar XML (FACe)
-              </Button>
-            </Link>
+          {factura.estado === 'BORRADOR' ? (
+            <>
+              <Link href={`/factura/${factura.id}/editar`}>
+                <Button variant="secondary">Editar borrador</Button>
+              </Link>
+              <EmitirButton facturaId={factura.id} />
+            </>
+          ) : (
+            <>
+              <Link href={`/api/factura/${factura.id}/pdf`} target="_blank">
+                <Button>
+                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Descargar PDF
+                </Button>
+              </Link>
+              {factura.cliente.esAdministracion && (
+                <Link href={`/api/factura/${factura.id}/xml`} target="_blank">
+                  <Button variant="outline">
+                    <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    Descargar XML (FACe)
+                  </Button>
+                </Link>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -267,18 +283,29 @@ export default async function FacturaDetallePage({
 
       {/* Acciones */}
       <div className="flex flex-wrap gap-4">
-        <Link href="/facturas">
-          <Button variant="outline">Volver al historial</Button>
-        </Link>
-        <Link href="/factura/nueva">
-          <Button variant="secondary">Crear otra factura</Button>
-        </Link>
-        <ChangeSociedadButton
-          facturaId={factura.id}
-          sociedadActualId={factura.sociedadId}
-          sociedades={sociedades}
-        />
-        <DeleteButton facturaId={factura.id} numeroFactura={factura.numeroCompleto} />
+        {factura.estado === 'BORRADOR' ? (
+          <>
+            <Link href="/borradores">
+              <Button variant="outline">Volver a borradores</Button>
+            </Link>
+            <DeleteButton facturaId={factura.id} numeroFactura="este borrador" />
+          </>
+        ) : (
+          <>
+            <Link href="/facturas">
+              <Button variant="outline">Volver al historial</Button>
+            </Link>
+            <Link href="/factura/nueva">
+              <Button variant="secondary">Crear otra factura</Button>
+            </Link>
+            <ChangeSociedadButton
+              facturaId={factura.id}
+              sociedadActualId={factura.sociedadId}
+              sociedades={sociedades}
+            />
+            <DeleteButton facturaId={factura.id} numeroFactura={factura.numeroCompleto} />
+          </>
+        )}
       </div>
     </div>
   )

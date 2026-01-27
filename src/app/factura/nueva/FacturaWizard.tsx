@@ -83,7 +83,7 @@ export default function FacturaWizard({ sociedades, clientes, sociedadInicial }:
     setLineas(nuevasLineas)
   }
 
-  async function handleCrearFactura() {
+  async function handleCrearFactura(comoBorrador: boolean = false) {
     if (!sociedadId || !clienteId) return
 
     // Validar que haya al menos una línea con datos
@@ -107,6 +107,7 @@ export default function FacturaWizard({ sociedades, clientes, sociedadInicial }:
         diasPago,
         notas: notas || null,
         lineas: lineasValidas,
+        comoBorrador,
       })
 
       if (result.success && result.facturaId) {
@@ -432,9 +433,18 @@ export default function FacturaWizard({ sociedades, clientes, sociedadInicial }:
             <Button variant="outline" onClick={() => setPaso(2)}>
               Anterior
             </Button>
-            <Button onClick={handleCrearFactura} disabled={loading} size="lg">
-              {loading ? 'Creando...' : 'Crear Factura'}
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => handleCrearFactura(true)}
+                disabled={loading}
+              >
+                {loading ? 'Guardando...' : 'Guardar borrador'}
+              </Button>
+              <Button onClick={() => handleCrearFactura(false)} disabled={loading} size="lg">
+                {loading ? 'Creando...' : 'Crear Factura'}
+              </Button>
+            </div>
           </div>
         </div>
       )}
