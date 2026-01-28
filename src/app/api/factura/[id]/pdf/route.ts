@@ -40,7 +40,7 @@ export async function GET(
   } catch (error) {
     console.error('Error generando PDF:', error)
     return NextResponse.json(
-      { error: 'Error al generar el PDF' },
+      { error: 'Error al generar el PDF', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }

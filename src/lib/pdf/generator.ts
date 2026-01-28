@@ -1,6 +1,4 @@
 import type { TDocumentDefinitions, Content, TableCell } from 'pdfmake/interfaces'
-import { readFile } from 'fs/promises'
-import path from 'path'
 
 interface Sociedad {
   nombre: string
@@ -88,12 +86,10 @@ async function loadImageAsBase64(logoUrl: string | null): Promise<string | null>
         mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
       }
     } else {
-      // Archivo local: quitar el "/" inicial si existe
-      const cleanLogoUrl = logoUrl.startsWith('/') ? logoUrl.slice(1) : logoUrl
-      const filePath = path.join(process.cwd(), 'public', cleanLogoUrl)
-      buffer = await readFile(filePath)
-      const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
-      mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+      // En serverless (Vercel) no hay acceso al filesystem de public/
+      // Los logos deben estar en Vercel Blob (URL https://)
+      console.warn('Logo con ruta local no soportada en serverless:', logoUrl)
+      return null
     }
 
     return `data:${mimeType};base64,${buffer.toString('base64')}`

@@ -40,7 +40,7 @@ export async function GET(
   } catch (error) {
     console.error('Error generando XML:', error)
     return NextResponse.json(
-      { error: 'Error al generar el XML' },
+      { error: 'Error al generar el XML', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }
