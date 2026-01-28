@@ -61,38 +61,21 @@ function formatDate(date: Date): string {
   }).format(new Date(date))
 }
 
-async function loadImageAsBase64(logoUrl: string | null): Promise<string | null> {
+async function loadLogoBuffer(logoUrl: string | null): Promise<Buffer | null> {
   if (!logoUrl) return null
 
   try {
-    let buffer: Buffer
-    let mimeType: string
-
-    // Verificar si es una URL externa (Vercel Blob u otra)
     if (logoUrl.startsWith('http://') || logoUrl.startsWith('https://')) {
       const response = await fetch(logoUrl)
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`)
       }
       const arrayBuffer = await response.arrayBuffer()
-      buffer = Buffer.from(arrayBuffer)
-
-      // Obtener el tipo MIME del header o inferirlo de la URL
-      const contentType = response.headers.get('content-type')
-      if (contentType && contentType.startsWith('image/')) {
-        mimeType = contentType.split(';')[0]
-      } else {
-        const ext = logoUrl.split('.').pop()?.toLowerCase() || 'png'
-        mimeType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
-      }
+      return Buffer.from(arrayBuffer)
     } else {
-      // En serverless (Vercel) no hay acceso al filesystem de public/
-      // Los logos deben estar en Vercel Blob (URL https://)
       console.warn('Logo con ruta local no soportada en serverless:', logoUrl)
       return null
     }
-
-    return `data:${mimeType};base64,${buffer.toString('base64')}`
   } catch (error) {
     console.warn('No se pudo cargar el logo:', logoUrl, error)
     return null
@@ -119,7 +102,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
   const printer = new PdfPrinter(fonts)
 
   const nombreEmisor = factura.sociedad.nombreComercial || factura.sociedad.nombre
-  const logoBase64 = await loadImageAsBase64(factura.sociedad.logoUrl)
+  const logoBuffer = await loadLogoBuffer(factura.sociedad.logoUrl)
 
   const docDefinition: TDocumentDefinitions = {
     pageSize: 'A4',
@@ -133,9 +116,9 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
       {
         columns: [
           // Logo (si existe)
-          logoBase64
+          logoBuffer
             ? {
-                image: logoBase64,
+                image: logoBuffer,
                 width: 70,
                 margin: [0, 0, 15, 0] as [number, number, number, number],
               }
