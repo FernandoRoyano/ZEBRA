@@ -411,11 +411,13 @@ export default function GuiaContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            {abierta && (
-              <div className="mt-4 pt-4 border-t border-zebra-border">
-                {seccion.contenido}
+            <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${abierta ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+              <div className="overflow-hidden">
+                <div className={`pt-4 mt-4 border-t border-zebra-border transition-opacity duration-300 ${abierta ? 'opacity-100' : 'opacity-0'}`}>
+                  {seccion.contenido}
+                </div>
               </div>
-            )}
+            </div>
           </Card>
         )
       })}
