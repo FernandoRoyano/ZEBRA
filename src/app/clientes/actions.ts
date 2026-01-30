@@ -66,6 +66,18 @@ export async function eliminarCliente(id: number) {
       }
     }
 
+    // Verificar si tiene presupuestos
+    const presupuestos = await prisma.presupuesto.count({
+      where: { clienteId: id },
+    })
+
+    if (presupuestos > 0) {
+      return {
+        success: false,
+        error: `No se puede eliminar: el cliente tiene ${presupuestos} presupuesto(s) asociado(s)`,
+      }
+    }
+
     await prisma.cliente.delete({
       where: { id },
     })
