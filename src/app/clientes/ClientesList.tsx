@@ -182,8 +182,8 @@ export default function ClientesList({ clientes }: { clientes: Cliente[] }) {
   const activeColumns = ALL_COLUMNS.filter(c => visibleColumns.has(c.key))
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-4 items-center">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex gap-2 sm:gap-4 items-center">
         <div className="flex-1">
           <SearchBar
             placeholder="Buscar por nombre, NIF, email o tags..."
@@ -191,8 +191,8 @@ export default function ClientesList({ clientes }: { clientes: Cliente[] }) {
             onChange={(e) => setBusqueda(e.target.value)}
           />
         </div>
-        {/* Selector de columnas */}
-        <div className="relative" ref={pickerRef}>
+        {/* Selector de columnas - solo visible en desktop */}
+        <div className="relative hidden sm:block" ref={pickerRef}>
           <button
             type="button"
             onClick={() => setShowColumnPicker(!showColumnPicker)}
@@ -223,55 +223,107 @@ export default function ClientesList({ clientes }: { clientes: Cliente[] }) {
       </div>
 
       {clientesFiltrados.length === 0 ? (
-        <div className="bg-white rounded-xl border border-zebra-border p-8 text-center">
-          <p className="text-zebra-gray text-lg">
+        <div className="bg-white rounded-xl border border-zebra-border p-6 sm:p-8 text-center">
+          <p className="text-zebra-gray text-base sm:text-lg">
             {busqueda ? 'No se encontraron clientes' : 'No hay clientes guardados'}
           </p>
           {!busqueda && (
-            <p className="text-zebra-gray/70 mt-1">
+            <p className="text-zebra-gray/70 mt-1 text-sm">
               Crea tu primer cliente con el botón &quot;Nuevo Cliente&quot;
             </p>
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-zebra-border overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-zebra-border">
-              <thead className="bg-zebra-light">
-                <tr>
-                  {activeColumns.map(col => (
-                    <th
-                      key={col.key}
-                      className="px-6 py-4 text-left text-sm font-semibold text-zebra-dark whitespace-nowrap"
-                    >
-                      {col.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zebra-border">
-                {clientesFiltrados.map((cliente) => (
-                  <tr
-                    key={cliente.id}
-                    onClick={() => router.push(`/clientes/${cliente.id}`)}
-                    className="hover:bg-zebra-primary/5 cursor-pointer transition-colors"
-                  >
+        <>
+          {/* Vista móvil: tarjetas */}
+          <div className="sm:hidden space-y-3">
+            {clientesFiltrados.map((cliente) => (
+              <div
+                key={cliente.id}
+                onClick={() => router.push(`/clientes/${cliente.id}`)}
+                className="bg-white rounded-xl border border-zebra-border p-4 active:bg-zebra-primary/5 cursor-pointer transition-colors"
+              >
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-zebra-dark truncate">{cliente.nombre}</p>
+                    <p className="text-xs text-zebra-gray mt-0.5">{cliente.nif}</p>
+                  </div>
+                  <span className={`shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${getTipoColor(cliente.tipoContacto)}`}>
+                    {getTipoLabel(cliente.tipoContacto)}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zebra-gray mt-2">
+                  {cliente.email && (
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                      {cliente.email}
+                    </span>
+                  )}
+                  {cliente.telefono && (
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                      {cliente.telefono}
+                    </span>
+                  )}
+                  {cliente.ciudad && (
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      {cliente.ciudad}
+                    </span>
+                  )}
+                </div>
+                {cliente.tags && (
+                  <div className="mt-2">{renderTags(cliente.tags)}</div>
+                )}
+              </div>
+            ))}
+            <div className="text-center py-2">
+              <p className="text-xs text-zebra-gray">
+                {clientesFiltrados.length} cliente{clientesFiltrados.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
+
+          {/* Vista desktop: tabla */}
+          <div className="hidden sm:block bg-white rounded-xl border border-zebra-border overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-zebra-border">
+                <thead className="bg-zebra-light">
+                  <tr>
                     {activeColumns.map(col => (
-                      <td key={col.key} className="px-6 py-4 text-sm text-zebra-gray whitespace-nowrap">
-                        {getCellValue(cliente, col.key)}
-                      </td>
+                      <th
+                        key={col.key}
+                        className="px-6 py-4 text-left text-sm font-semibold text-zebra-dark whitespace-nowrap"
+                      >
+                        {col.label}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-zebra-border">
+                  {clientesFiltrados.map((cliente) => (
+                    <tr
+                      key={cliente.id}
+                      onClick={() => router.push(`/clientes/${cliente.id}`)}
+                      className="hover:bg-zebra-primary/5 cursor-pointer transition-colors"
+                    >
+                      {activeColumns.map(col => (
+                        <td key={col.key} className="px-6 py-4 text-sm text-zebra-gray whitespace-nowrap">
+                          {getCellValue(cliente, col.key)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-6 py-3 bg-zebra-light/50 border-t border-zebra-border">
+              <p className="text-sm text-zebra-gray">
+                {clientesFiltrados.length} cliente{clientesFiltrados.length !== 1 ? 's' : ''}
+              </p>
+            </div>
           </div>
-          <div className="px-6 py-3 bg-zebra-light/50 border-t border-zebra-border">
-            <p className="text-sm text-zebra-gray">
-              {clientesFiltrados.length} cliente{clientesFiltrados.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-        </div>
+        </>
       )}
     </div>
   )

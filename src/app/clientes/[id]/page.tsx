@@ -23,10 +23,10 @@ export default async function EditarClientePage({
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-zebra-dark">Editar Cliente</h1>
-          <p className="text-zebra-gray mt-1">Modifica los datos de {cliente.nombre}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-zebra-dark">Editar Cliente</h1>
+          <p className="text-zebra-gray mt-1 text-sm sm:text-base">Modifica los datos de {cliente.nombre}</p>
         </div>
         <DeleteClienteButton clienteId={cliente.id} />
       </div>

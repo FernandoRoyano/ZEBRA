@@ -302,14 +302,15 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
           )}
         </div>
 
-        <div className="flex gap-4 pt-4">
-          <Button type="submit" disabled={loading}>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
             {loading ? 'Guardando...' : cliente ? 'Guardar cambios' : 'Crear cliente'}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
+            className="w-full sm:w-auto"
           >
             Cancelar
           </Button>
