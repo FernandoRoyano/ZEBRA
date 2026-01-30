@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, Input, Card } from '@/components/ui'
+import { Button, Input, Card, Textarea } from '@/components/ui'
 import { guardarSociedad } from './actions'
 import LogoUploader from './[id]/LogoUploader'
 
@@ -20,6 +20,7 @@ interface Sociedad {
   iban: string | null
   logoUrl: string | null
   serieActual: string
+  clausulaProteccionDatos: string | null
   activa: boolean
 }
 
@@ -140,6 +141,14 @@ export default function SociedadForm({ sociedad }: { sociedad?: Sociedad }) {
 
         <LogoUploader currentLogo={logoUrl} onLogoChange={setLogoUrl} />
         <input type="hidden" name="logoUrl" value={logoUrl || ''} />
+
+        <Textarea
+          name="clausulaProteccionDatos"
+          label="Cláusula de protección de datos (LOPD/RGPD)"
+          defaultValue={sociedad?.clausulaProteccionDatos ?? ''}
+          placeholder="En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), le informamos de que sus datos personales serán tratados por..."
+          rows={4}
+        />
 
         <div className="flex items-center gap-3">
           <input

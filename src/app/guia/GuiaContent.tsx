@@ -22,37 +22,254 @@ const secciones: SeccionGuia[] = [
     contenido: (
       <div className="space-y-4">
         <p className="text-zebra-gray">
-          El panel principal es tu punto de partida. Aquí tienes un resumen completo de tu actividad de facturación.
+          El panel principal es tu punto de partida. Te da la bienvenida con un saludo personalizado y te ofrece un resumen completo de la actividad financiera de tu negocio.
         </p>
         <div className="space-y-3">
           <div className="flex gap-3">
             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
             <div>
-              <p className="font-medium text-zebra-dark">Tarjetas de resumen</p>
-              <p className="text-sm text-zebra-gray">En la parte superior verás 4 tarjetas con: total de facturas emitidas, facturas del mes actual, número de clientes y el total facturado en euros.</p>
+              <p className="font-medium text-zebra-dark">Panel de Finanzas</p>
+              <p className="text-sm text-zebra-gray">En la parte superior encontrarás 3 tarjetas con los datos financieros clave: <strong>Ingresos</strong> (verde), <strong>Gastos</strong> (rojo) y <strong>Beneficio</strong> (ingresos menos gastos). Puedes cambiar el periodo entre <strong>&quot;Mes actual&quot;</strong> y <strong>&quot;Últimos 30 días&quot;</strong> con el desplegable de la esquina.</p>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
             <div>
-              <p className="font-medium text-zebra-dark">Facturación por entidad</p>
-              <p className="text-sm text-zebra-gray">Debajo de las tarjetas se muestra un desglose de la facturación acumulada por cada sociedad/asociación que tengas registrada.</p>
+              <p className="font-medium text-zebra-dark">Tarjetas de resumen</p>
+              <p className="text-sm text-zebra-gray">Debajo del panel de finanzas verás 4 tarjetas con: total de facturas emitidas, facturas del mes actual, número de clientes y el total facturado en euros.</p>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
             <div>
-              <p className="font-medium text-zebra-dark">Accesos rápidos</p>
-              <p className="text-sm text-zebra-gray">Cada sociedad activa tiene un botón para crear una factura nueva directamente asociada a ella, ahorrándote un paso en el proceso.</p>
+              <p className="font-medium text-zebra-dark">Gráfico de los últimos 12 meses</p>
+              <p className="text-sm text-zebra-gray">Un gráfico de barras agrupadas te muestra la evolución de <strong>ingresos</strong> (verde) y <strong>gastos</strong> (rojo) mes a mes durante el último año. Pasa el ratón sobre las barras para ver los importes exactos.</p>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">4</span>
             <div>
-              <p className="font-medium text-zebra-dark">Últimas facturas</p>
-              <p className="text-sm text-zebra-gray">Al final del panel verás una tabla con las 5 facturas más recientes, incluyendo su número, cliente, sociedad, fecha y total. Puedes hacer clic en cualquiera para verla en detalle.</p>
+              <p className="font-medium text-zebra-dark">Facturación por entidad</p>
+              <p className="text-sm text-zebra-gray">Se muestra un desglose de la facturación acumulada por cada sociedad/asociación que tengas registrada.</p>
             </div>
           </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">5</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Accesos rápidos y últimas facturas</p>
+              <p className="text-sm text-zebra-gray">Cada sociedad activa tiene un botón para crear una factura directamente. Al final del panel verás una tabla con las 5 facturas más recientes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'clientes',
+    titulo: 'Gestión de clientes',
+    icono: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+    contenido: (
+      <div className="space-y-4">
+        <p className="text-zebra-gray">
+          Gestiona tus contactos comerciales: clientes, proveedores, leads y más. Puedes registrarlos como empresa o persona.
+        </p>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Vista de tabla</p>
+              <p className="text-sm text-zebra-gray">La sección <strong>&quot;Clientes&quot;</strong> muestra todos tus contactos en una tabla con columnas: Nombre, ID (NIF), Email, Teléfono, Población, Tags y Tipo. Puedes buscar por nombre, NIF, email o tags.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Personalizar columnas</p>
+              <p className="text-sm text-zebra-gray">Pulsa el botón <strong>&quot;Columnas&quot;</strong> para mostrar u ocultar las columnas que prefieras. Tu selección se guarda automáticamente para la próxima vez.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Crear un nuevo contacto</p>
+              <p className="text-sm text-zebra-gray">Pulsa <strong>&quot;Nuevo Cliente&quot;</strong> y selecciona si es <strong>Empresa</strong> o <strong>Persona</strong>:</p>
+              <ul className="mt-2 text-sm text-zebra-gray list-disc list-inside space-y-1">
+                <li><strong>Empresa:</strong> Razón social, NIF/CIF, identificación VAT, nombre comercial, dirección completa, datos de contacto (email, teléfono, móvil, website), tags y tipo de contacto.</li>
+                <li><strong>Persona:</strong> Nombre completo, NIF/DNI, empresa a la que pertenece, nombre comercial, dirección completa, datos de contacto, tags y tipo de contacto.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">4</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Tipo de contacto</p>
+              <p className="text-sm text-zebra-gray">Cada contacto puede clasificarse como:</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Cliente</span>
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Proveedor</span>
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">Lead</span>
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">Deudor</span>
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">Acreedor</span>
+                <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">Sin especificar</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">5</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Tags</p>
+              <p className="text-sm text-zebra-gray">Añade etiquetas a tus contactos para organizarlos mejor (ej: &quot;vip&quot;, &quot;mayorista&quot;, &quot;diseño&quot;). Separa los tags con comas. Aparecerán como badges de color en la tabla.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">6</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Editar un contacto</p>
+              <p className="text-sm text-zebra-gray">Haz clic en cualquier fila de la tabla para acceder a su ficha y modificar sus datos. Los cambios se guardan al pulsar &quot;Guardar cambios&quot;.</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-sm text-blue-700">
+            <strong>Consejo:</strong> Si el contacto es una Administración Pública, marca la casilla correspondiente en el formulario para habilitar los campos de facturación electrónica FACe (códigos DIR3).
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'gastos',
+    titulo: 'Gestión de gastos',
+    icono: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+    contenido: (
+      <div className="space-y-4">
+        <p className="text-zebra-gray">
+          Registra y controla los gastos de tu negocio. Los gastos se reflejan automáticamente en el panel de finanzas del inicio y en el gráfico de los últimos 12 meses.
+        </p>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Ver gastos</p>
+              <p className="text-sm text-zebra-gray">La sección <strong>&quot;Gastos&quot;</strong> muestra una tabla con todos los gastos registrados: concepto, importe, fecha, categoría, proveedor y sociedad. En la parte inferior verás el total acumulado.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Crear un nuevo gasto</p>
+              <p className="text-sm text-zebra-gray">Pulsa <strong>&quot;Nuevo Gasto&quot;</strong> y rellena los datos:</p>
+              <ul className="mt-1 text-sm text-zebra-gray list-disc list-inside space-y-1">
+                <li><strong>Concepto:</strong> Descripción breve del gasto (obligatorio)</li>
+                <li><strong>Importe:</strong> Cantidad en euros (obligatorio)</li>
+                <li><strong>Fecha:</strong> Fecha del gasto (obligatorio)</li>
+                <li><strong>Categoría:</strong> Material, Servicios, Personal, Alquiler, Suministros, Transporte u Otros</li>
+                <li><strong>Proveedor:</strong> Nombre del proveedor (opcional)</li>
+                <li><strong>Sociedad:</strong> Sociedad a la que se asigna el gasto (obligatorio)</li>
+                <li><strong>Descripción:</strong> Notas adicionales (opcional)</li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Editar o eliminar</p>
+              <p className="text-sm text-zebra-gray">Cada gasto tiene botones de edición y eliminación en la columna de acciones. Al eliminar, se pide confirmación antes de borrar.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">4</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Búsqueda</p>
+              <p className="text-sm text-zebra-gray">Utiliza la barra de búsqueda superior para filtrar gastos por concepto, proveedor o categoría.</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-sm text-blue-700">
+            <strong>Consejo:</strong> Registra los gastos de forma regular para que el panel de finanzas del inicio refleje datos reales de tu beneficio (ingresos - gastos).
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'presupuestos',
+    titulo: 'Presupuestos',
+    icono: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg>
+    ),
+    contenido: (
+      <div className="space-y-4">
+        <p className="text-zebra-gray">
+          Los presupuestos son documentos previos a la factura que envías a tus clientes para que aprueben un trabajo o servicio antes de realizarlo.
+        </p>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Crear un presupuesto</p>
+              <p className="text-sm text-zebra-gray">Ve a <strong>&quot;Presupuestos&quot;</strong> en el menú y pulsa <strong>&quot;Nuevo Presupuesto&quot;</strong>. El proceso es similar a crear una factura: selecciona sociedad, cliente y añade las líneas con conceptos, cantidades y precios. Adicionalmente puedes añadir <strong>condiciones</strong> del presupuesto y <strong>días de validez</strong>.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Estados del presupuesto</p>
+              <p className="text-sm text-zebra-gray">Un presupuesto pasa por varios estados:</p>
+              <div className="mt-2 space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">Borrador</span>
+                  <span className="text-sm text-zebra-gray">Presupuesto en preparación, editable</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Enviado</span>
+                  <span className="text-sm text-zebra-gray">Enviado al cliente, esperando respuesta</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">Aceptado</span>
+                  <span className="text-sm text-zebra-gray">El cliente ha aceptado el presupuesto</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">Rechazado</span>
+                  <span className="text-sm text-zebra-gray">El cliente ha rechazado el presupuesto</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-700">Expirado</span>
+                  <span className="text-sm text-zebra-gray">Ha pasado la fecha de validez</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Convertir a factura</p>
+              <p className="text-sm text-zebra-gray">Cuando un presupuesto es <strong>aceptado</strong>, puedes convertirlo en factura directamente pulsando el botón <strong>&quot;Convertir a factura&quot;</strong>. Se creará una factura con los mismos datos y líneas del presupuesto. El presupuesto quedará vinculado a la factura generada.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">4</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Descargar PDF</p>
+              <p className="text-sm text-zebra-gray">Desde la vista de detalle de cualquier presupuesto emitido puedes descargar su PDF. El documento lleva el título &quot;PRESUPUESTO&quot; e incluye los conceptos, totales, condiciones y la cláusula de protección de datos si está configurada.</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-sm text-blue-700">
+            <strong>Consejo:</strong> La numeración de presupuestos es independiente de las facturas. Los presupuestos usan el formato P-AÑO-NÚMERO (ej: P-2026-0001).
+          </p>
         </div>
       </div>
     ),
@@ -226,57 +443,6 @@ const secciones: SeccionGuia[] = [
     ),
   },
   {
-    id: 'clientes',
-    titulo: 'Gestión de clientes',
-    icono: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-    contenido: (
-      <div className="space-y-4">
-        <p className="text-zebra-gray">
-          Gestiona los clientes a los que emites facturas. Puedes crear, editar y consultar sus datos.
-        </p>
-        <div className="space-y-3">
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
-            <div>
-              <p className="font-medium text-zebra-dark">Ver clientes</p>
-              <p className="text-sm text-zebra-gray">La sección <strong>&quot;Clientes&quot;</strong> muestra todos tus clientes registrados con su nombre, NIF y el número de facturas asociadas.</p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
-            <div>
-              <p className="font-medium text-zebra-dark">Crear un nuevo cliente</p>
-              <p className="text-sm text-zebra-gray">Pulsa <strong>&quot;Nuevo cliente&quot;</strong> e introduce los datos: nombre o razón social, NIF/CIF, dirección completa (calle, código postal, ciudad, provincia), email y teléfono de contacto.</p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
-            <div>
-              <p className="font-medium text-zebra-dark">Tipos de cliente</p>
-              <p className="text-sm text-zebra-gray">ZEBRA distingue automáticamente el tipo de cliente según su NIF:</p>
-              <ul className="mt-1 text-sm text-zebra-gray list-disc list-inside space-y-1">
-                <li><strong>Empresa</strong> (NIF empieza por B): Sociedad limitada o anónima</li>
-                <li><strong>Administración pública</strong> (NIF empieza por P, Q, S): Permite generar facturas en formato FACe/XML</li>
-                <li><strong>Particular/Autónomo</strong>: Cualquier otro NIF</li>
-              </ul>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">4</span>
-            <div>
-              <p className="font-medium text-zebra-dark">Editar un cliente</p>
-              <p className="text-sm text-zebra-gray">Haz clic en cualquier cliente de la lista para acceder a su ficha y modificar sus datos.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
     id: 'sociedades',
     titulo: 'Gestión de sociedades',
     icono: (
@@ -330,6 +496,50 @@ const secciones: SeccionGuia[] = [
     ),
   },
   {
+    id: 'proteccion-datos',
+    titulo: 'Cláusula de protección de datos',
+    icono: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
+    contenido: (
+      <div className="space-y-4">
+        <p className="text-zebra-gray">
+          Puedes configurar un texto legal de protección de datos (LOPD/RGPD) para que aparezca automáticamente al pie de tus facturas y presupuestos en PDF.
+        </p>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">1</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Configurar la cláusula</p>
+              <p className="text-sm text-zebra-gray">Ve a <strong>&quot;Sociedades&quot;</strong>, edita la sociedad deseada, y rellena el campo <strong>&quot;Cláusula de protección de datos (LOPD/RGPD)&quot;</strong> con el texto legal que quieras incluir.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">2</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Aparición en PDFs</p>
+              <p className="text-sm text-zebra-gray">Si la sociedad tiene una cláusula configurada, aparecerá automáticamente en letra pequeña al pie de todos los PDFs de facturas y presupuestos emitidos por esa sociedad.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-zebra-primary/10 text-zebra-primary flex items-center justify-center text-sm font-bold">3</span>
+            <div>
+              <p className="font-medium text-zebra-dark">Texto sugerido</p>
+              <p className="text-sm text-zebra-gray">El campo incluye un placeholder con un ejemplo de cláusula RGPD que puedes adaptar a tu empresa. Recuerda sustituir los datos entre corchetes por los de tu sociedad.</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <p className="text-sm text-yellow-700">
+            <strong>Importante:</strong> La cláusula es opcional. Si no la configuras, no se mostrará ningún texto legal al pie de los documentos. Cada sociedad puede tener su propia cláusula personalizada.
+          </p>
+        </div>
+      </div>
+    ),
+  },
+  {
     id: 'pdf-xml',
     titulo: 'Descargas: PDF y XML (FACe)',
     icono: (
@@ -371,7 +581,7 @@ const secciones: SeccionGuia[] = [
         </div>
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-sm text-yellow-700">
-            <strong>Nota:</strong> El botón de XML solo aparece para facturas cuyo cliente sea una administración pública (NIF que empieza por P, Q o S).
+            <strong>Nota:</strong> El botón de XML solo aparece para facturas cuyo cliente sea una administración pública (marcada con la casilla FACe activada).
           </p>
         </div>
       </div>

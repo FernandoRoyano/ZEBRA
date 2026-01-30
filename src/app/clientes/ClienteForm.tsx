@@ -13,8 +13,17 @@ interface Cliente {
   codigoPostal: string
   ciudad: string
   provincia: string
+  pais: string
   telefono: string | null
   email: string | null
+  tipoEntidad: string
+  nombreComercial: string | null
+  movil: string | null
+  website: string | null
+  tags: string | null
+  tipoContacto: string
+  empresaAsociada: string | null
+  identVat: string | null
   esAdministracion: boolean
   codigoDir3: string | null
   organoGestor: string | null
@@ -22,10 +31,20 @@ interface Cliente {
   oficinaContable: string | null
 }
 
+const TIPOS_CONTACTO = [
+  { value: 'cliente', label: 'Cliente' },
+  { value: 'proveedor', label: 'Proveedor' },
+  { value: 'lead', label: 'Lead' },
+  { value: 'deudor', label: 'Deudor' },
+  { value: 'acreedor', label: 'Acreedor' },
+  { value: 'sin_especificar', label: 'Sin especificar' },
+]
+
 export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [tipoEntidad, setTipoEntidad] = useState(cliente?.tipoEntidad || 'empresa')
   const [esAdmin, setEsAdmin] = useState(cliente?.esAdministracion || false)
 
   async function handleSubmit(formData: FormData) {
@@ -49,6 +68,8 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
 
   return (
     <form action={handleSubmit}>
+      <input type="hidden" name="tipoEntidad" value={tipoEntidad} />
+
       <Card className="space-y-6">
         {error && (
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
@@ -56,61 +77,177 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
           </div>
         )}
 
+        {/* Toggle Empresa / Persona */}
+        <div>
+          <label className="block text-sm font-medium text-zebra-dark mb-2">Tipo de entidad</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setTipoEntidad('empresa')}
+              className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                tipoEntidad === 'empresa'
+                  ? 'bg-zebra-primary text-white shadow-md'
+                  : 'bg-zebra-light text-zebra-gray hover:bg-zebra-border'
+              }`}
+            >
+              Empresa
+            </button>
+            <button
+              type="button"
+              onClick={() => setTipoEntidad('persona')}
+              className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                tipoEntidad === 'persona'
+                  ? 'bg-zebra-primary text-white shadow-md'
+                  : 'bg-zebra-light text-zebra-gray hover:bg-zebra-border'
+              }`}
+            >
+              Persona
+            </button>
+          </div>
+        </div>
+
+        {/* Nombre */}
         <Input
           name="nombre"
-          label="Nombre o Razón Social"
+          label={tipoEntidad === 'empresa' ? 'Razón Social' : 'Nombre completo'}
           defaultValue={cliente?.nombre || ''}
           required
         />
 
+        {/* NIF */}
         <Input
           name="nif"
-          label="NIF / CIF"
+          label={tipoEntidad === 'empresa' ? 'NIF / CIF' : 'NIF / DNI'}
           defaultValue={cliente?.nif || ''}
           required
         />
 
+        {/* Solo Empresa: Identificación VAT */}
+        {tipoEntidad === 'empresa' && (
+          <Input
+            name="identVat"
+            label="Identificación VAT"
+            defaultValue={cliente?.identVat || ''}
+            placeholder="Ej: ESB12345678"
+          />
+        )}
+
+        {/* Solo Persona: Empresa asociada */}
+        {tipoEntidad === 'persona' && (
+          <Input
+            name="empresaAsociada"
+            label="Empresa"
+            defaultValue={cliente?.empresaAsociada || ''}
+            placeholder="Empresa a la que pertenece"
+          />
+        )}
+
+        {/* Nombre comercial */}
         <Input
-          name="direccion"
-          label="Dirección"
-          defaultValue={cliente?.direccion || ''}
-          required
+          name="nombreComercial"
+          label="Nombre comercial"
+          defaultValue={cliente?.nombreComercial || ''}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Input
-            name="codigoPostal"
-            label="Código Postal"
-            defaultValue={cliente?.codigoPostal || ''}
-            required
-          />
-          <Input
-            name="ciudad"
-            label="Ciudad"
-            defaultValue={cliente?.ciudad || ''}
-            required
-          />
-          <Input
-            name="provincia"
-            label="Provincia"
-            defaultValue={cliente?.provincia || ''}
-            required
-          />
+        {/* Dirección */}
+        <div className="pt-4 border-t border-zebra-border">
+          <h3 className="text-base font-semibold text-zebra-dark mb-4">Dirección</h3>
+          <div className="space-y-4">
+            <Input
+              name="direccion"
+              label="Dirección"
+              defaultValue={cliente?.direccion || ''}
+              required
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                name="ciudad"
+                label="Población"
+                defaultValue={cliente?.ciudad || ''}
+                required
+              />
+              <Input
+                name="codigoPostal"
+                label="Código postal"
+                defaultValue={cliente?.codigoPostal || ''}
+                required
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                name="provincia"
+                label="Provincia"
+                defaultValue={cliente?.provincia || ''}
+                required
+              />
+              <Input
+                name="pais"
+                label="País"
+                defaultValue={cliente?.pais || 'ESP'}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input
-            name="telefono"
-            label="Teléfono"
-            type="tel"
-            defaultValue={cliente?.telefono || ''}
-          />
-          <Input
-            name="email"
-            label="Email"
-            type="email"
-            defaultValue={cliente?.email || ''}
-          />
+        {/* Contacto */}
+        <div className="pt-4 border-t border-zebra-border">
+          <h3 className="text-base font-semibold text-zebra-dark mb-4">Datos de contacto</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              name="email"
+              label="Email"
+              type="email"
+              defaultValue={cliente?.email || ''}
+            />
+            <Input
+              name="telefono"
+              label="Teléfono"
+              type="tel"
+              defaultValue={cliente?.telefono || ''}
+            />
+            <Input
+              name="movil"
+              label="Móvil"
+              type="tel"
+              defaultValue={cliente?.movil || ''}
+            />
+            <Input
+              name="website"
+              label="Website"
+              defaultValue={cliente?.website || ''}
+              placeholder="https://..."
+            />
+          </div>
+        </div>
+
+        {/* Tags y Tipo de contacto */}
+        <div className="pt-4 border-t border-zebra-border">
+          <h3 className="text-base font-semibold text-zebra-dark mb-4">Clasificación</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              name="tags"
+              label="Tags"
+              defaultValue={cliente?.tags || ''}
+              placeholder="Separar con comas: vip, mayorista..."
+            />
+            <div>
+              <label htmlFor="tipoContacto" className="block text-sm font-medium text-zebra-dark mb-1.5">
+                Tipo de contacto
+              </label>
+              <select
+                name="tipoContacto"
+                id="tipoContacto"
+                defaultValue={cliente?.tipoContacto || 'cliente'}
+                className="w-full px-4 py-2.5 rounded-lg border border-zebra-border bg-white text-zebra-dark focus:outline-none focus:ring-2 focus:ring-zebra-primary/30 focus:border-zebra-primary transition-colors"
+              >
+                {TIPOS_CONTACTO.map((tipo) => (
+                  <option key={tipo.value} value={tipo.value}>
+                    {tipo.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Sección FACe */}

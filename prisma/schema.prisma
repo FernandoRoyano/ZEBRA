@@ -27,8 +27,12 @@ model Sociedad {
   logoUrl         String?
   ultimoNumero    Int       @default(0)
   serieActual     String    @default("A")
+  ultimoNumeroPresupuesto Int @default(0)
+  clausulaProteccionDatos String?
   activa          Boolean   @default(true)
   facturas        Factura[]
+  presupuestos    Presupuesto[]
+  gastos          Gasto[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }
@@ -45,6 +49,15 @@ model Cliente {
   pais               String    @default("ESP")
   telefono           String?
   email              String?
+  // Campos nuevos contacto
+  tipoEntidad        String    @default("empresa")   // "empresa" | "persona"
+  nombreComercial    String?                          // Nombre comercial
+  movil              String?                          // Teléfono móvil
+  website            String?                          // Sitio web
+  tags               String?                          // Tags separados por comas
+  tipoContacto      String    @default("cliente")   // cliente|proveedor|lead|deudor|acreedor|sin_especificar
+  empresaAsociada    String?                          // Solo persona: empresa a la que pertenece
+  identVat           String?                          // Identificación VAT (empresa)
   // Campos FACe (solo si es administración pública)
   esAdministracion   Boolean   @default(false)
   codigoDir3         String?   // Código DIR3 general
@@ -52,6 +65,7 @@ model Cliente {
   unidadTramitadora  String?   // Código unidad tramitadora
   oficinaContable    String?   // Código oficina contable
   facturas           Factura[]
+  presupuestos       Presupuesto[]
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 }
@@ -106,4 +120,58 @@ model ArchivoFactura {
   tipo        String   // PDF, XML
   rutaArchivo String
   createdAt   DateTime @default(now())
+}
+
+// Presupuesto (quote/budget)
+model Presupuesto {
+  id                Int                  @id @default(autoincrement())
+  numero            String
+  serie             String
+  numeroCompleto    String               @unique
+  fechaEmision      DateTime
+  fechaValidez      DateTime?
+  estado            String               @default("BORRADOR") // BORRADOR, ENVIADO, ACEPTADO, RECHAZADO, EXPIRADO
+  baseImponible     Float
+  totalIva          Float
+  totalPresupuesto  Float
+  notas             String?
+  condiciones       String?
+  sociedad          Sociedad             @relation(fields: [sociedadId], references: [id])
+  sociedadId        Int
+  cliente           Cliente              @relation(fields: [clienteId], references: [id])
+  clienteId         Int
+  lineas            LineaPresupuesto[]
+  facturaId         Int?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+// Línea de presupuesto (concepto)
+model LineaPresupuesto {
+  id              Int           @id @default(autoincrement())
+  presupuesto     Presupuesto   @relation(fields: [presupuestoId], references: [id], onDelete: Cascade)
+  presupuestoId   Int
+  descripcion     String
+  cantidad        Float
+  precioUnitario  Float
+  descuento       Float         @default(0)
+  tipoIva         String        @default("IVA")
+  porcentajeIva   Float         @default(21)
+  subtotal        Float
+  orden           Int
+}
+
+// Gasto (expense)
+model Gasto {
+  id          Int      @id @default(autoincrement())
+  concepto    String
+  descripcion String?
+  importe     Float
+  fecha       DateTime
+  categoria   String?  // material, servicios, personal, otros
+  proveedor   String?
+  sociedad    Sociedad @relation(fields: [sociedadId], references: [id])
+  sociedadId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

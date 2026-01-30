@@ -19,6 +19,7 @@ export async function guardarSociedad(id: number | undefined, formData: FormData
       iban: formData.get('iban') as string || null,
       logoUrl: formData.get('logoUrl') as string || null,
       serieActual: formData.get('serieActual') as string || 'A',
+      clausulaProteccionDatos: formData.get('clausulaProteccionDatos') as string || null,
       activa: formData.get('activa') === 'on',
     }
 

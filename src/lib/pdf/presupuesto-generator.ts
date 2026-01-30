@@ -10,7 +10,6 @@ interface Sociedad {
   provincia: string
   telefono: string | null
   email: string | null
-  iban: string | null
   logoUrl: string | null
   clausulaProteccionDatos: string | null
 }
@@ -24,7 +23,7 @@ interface Cliente {
   provincia: string
 }
 
-interface LineaFactura {
+interface LineaPresupuesto {
   descripcion: string
   cantidad: number
   precioUnitario: number
@@ -32,20 +31,19 @@ interface LineaFactura {
   subtotal: number
 }
 
-interface FacturaData {
+interface PresupuestoData {
   numeroCompleto: string
   fechaEmision: Date
-  fechaVencimiento: Date | null
+  fechaValidez: Date | null
   baseImponible: number
   totalIva: number
-  totalFactura: number
+  totalPresupuesto: number
   notas: string | null
+  condiciones: string | null
   sociedad: Sociedad
   cliente: Cliente
-  lineas: LineaFactura[]
+  lineas: LineaPresupuesto[]
 }
-
-// Las fuentes se configuran dentro de generarFacturaPDF usando Buffers
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('es-ES', {
@@ -83,14 +81,12 @@ async function loadLogoBuffer(logoUrl: string | null): Promise<Buffer | null> {
   }
 }
 
-export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
-  // pdfmake 0.2.x - importar y configurar fuentes como Buffers
+export async function generarPresupuestoPDF(presupuesto: PresupuestoData): Promise<Buffer> {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const PdfPrinter = require('pdfmake')
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const vfsFonts = require('pdfmake/build/vfs_fonts')
 
-  // Convertir fuentes de base64 a Buffer para Node.js
   const fonts = {
     Roboto: {
       normal: Buffer.from(vfsFonts.pdfMake.vfs['Roboto-Regular.ttf'], 'base64'),
@@ -102,8 +98,8 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
 
   const printer = new PdfPrinter(fonts)
 
-  const nombreEmisor = factura.sociedad.nombreComercial || factura.sociedad.nombre
-  const logoBuffer = await loadLogoBuffer(factura.sociedad.logoUrl)
+  const nombreEmisor = presupuesto.sociedad.nombreComercial || presupuesto.sociedad.nombre
+  const logoBuffer = await loadLogoBuffer(presupuesto.sociedad.logoUrl)
 
   const docDefinition: TDocumentDefinitions = {
     pageSize: 'A4',
@@ -116,7 +112,6 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
       // Cabecera con datos del emisor
       {
         columns: [
-          // Logo (si existe)
           logoBuffer
             ? {
                 image: logoBuffer,
@@ -124,31 +119,29 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
                 margin: [0, 0, 15, 0] as [number, number, number, number],
               }
             : { text: '', width: 0 },
-          // Datos empresa
           {
             width: '*',
             stack: [
               { text: nombreEmisor, style: 'companyName' },
-              { text: factura.sociedad.nif, style: 'companyInfo' },
-              { text: factura.sociedad.direccion, style: 'companyInfo' },
+              { text: presupuesto.sociedad.nif, style: 'companyInfo' },
+              { text: presupuesto.sociedad.direccion, style: 'companyInfo' },
               {
-                text: `${factura.sociedad.codigoPostal} ${factura.sociedad.ciudad}`,
+                text: `${presupuesto.sociedad.codigoPostal} ${presupuesto.sociedad.ciudad}`,
                 style: 'companyInfo',
               },
-              factura.sociedad.telefono
-                ? { text: `Tel: ${factura.sociedad.telefono}`, style: 'companyInfo' }
+              presupuesto.sociedad.telefono
+                ? { text: `Tel: ${presupuesto.sociedad.telefono}`, style: 'companyInfo' }
                 : '',
-              factura.sociedad.email
-                ? { text: factura.sociedad.email, style: 'companyInfo' }
+              presupuesto.sociedad.email
+                ? { text: presupuesto.sociedad.email, style: 'companyInfo' }
                 : '',
             ].filter(Boolean) as Content[],
           },
-          // Número factura
           {
             width: 200,
             stack: [
-              { text: 'FACTURA', style: 'invoiceTitle' },
-              { text: factura.numeroCompleto, style: 'invoiceNumber' },
+              { text: 'PRESUPUESTO', style: 'invoiceTitle' },
+              { text: presupuesto.numeroCompleto, style: 'invoiceNumber' },
             ],
           },
         ],
@@ -176,12 +169,12 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
           {
             width: '*',
             stack: [
-              { text: 'FACTURAR A:', style: 'sectionLabel' },
-              { text: factura.cliente.nombre, style: 'clientName' },
-              { text: `NIF: ${factura.cliente.nif}`, style: 'clientInfo' },
-              { text: factura.cliente.direccion, style: 'clientInfo' },
+              { text: 'PRESUPUESTO PARA:', style: 'sectionLabel' },
+              { text: presupuesto.cliente.nombre, style: 'clientName' },
+              { text: `NIF: ${presupuesto.cliente.nif}`, style: 'clientInfo' },
+              { text: presupuesto.cliente.direccion, style: 'clientInfo' },
               {
-                text: `${factura.cliente.codigoPostal} ${factura.cliente.ciudad}`,
+                text: `${presupuesto.cliente.codigoPostal} ${presupuesto.cliente.ciudad}`,
                 style: 'clientInfo',
               },
             ],
@@ -192,14 +185,14 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
               {
                 columns: [
                   { text: 'Fecha emisión:', width: 100, style: 'dateLabel' },
-                  { text: formatDate(factura.fechaEmision), style: 'dateValue' },
+                  { text: formatDate(presupuesto.fechaEmision), style: 'dateValue' },
                 ],
               },
-              factura.fechaVencimiento
+              presupuesto.fechaValidez
                 ? {
                     columns: [
-                      { text: 'Fecha vencimiento:', width: 100, style: 'dateLabel' },
-                      { text: formatDate(factura.fechaVencimiento), style: 'dateValue' },
+                      { text: 'Válido hasta:', width: 100, style: 'dateLabel' },
+                      { text: formatDate(presupuesto.fechaValidez), style: 'dateValue' },
                     ],
                   }
                 : null,
@@ -215,7 +208,6 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
           headerRows: 1,
           widths: ['*', 50, 70, 50, 80],
           body: [
-            // Header
             [
               { text: 'DESCRIPCIÓN', style: 'tableHeader' },
               { text: 'CANT.', style: 'tableHeader', alignment: 'center' },
@@ -223,8 +215,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
               { text: 'IVA', style: 'tableHeader', alignment: 'center' },
               { text: 'SUBTOTAL', style: 'tableHeader', alignment: 'right' },
             ] as TableCell[],
-            // Items
-            ...factura.lineas.map(
+            ...presupuesto.lineas.map(
               (linea) =>
                 [
                   { text: linea.descripcion, style: 'tableCell' },
@@ -264,14 +255,14 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
               {
                 columns: [
                   { text: 'Base imponible:', style: 'totalLabel' },
-                  { text: formatCurrency(factura.baseImponible), style: 'totalValue' },
+                  { text: formatCurrency(presupuesto.baseImponible), style: 'totalValue' },
                 ],
                 margin: [0, 5, 0, 0] as [number, number, number, number],
               },
               {
                 columns: [
                   { text: 'IVA:', style: 'totalLabel' },
-                  { text: formatCurrency(factura.totalIva), style: 'totalValue' },
+                  { text: formatCurrency(presupuesto.totalIva), style: 'totalValue' },
                 ],
                 margin: [0, 5, 0, 0] as [number, number, number, number],
               },
@@ -284,7 +275,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
               {
                 columns: [
                   { text: 'TOTAL:', style: 'grandTotalLabel' },
-                  { text: formatCurrency(factura.totalFactura), style: 'grandTotalValue' },
+                  { text: formatCurrency(presupuesto.totalPresupuesto), style: 'grandTotalValue' },
                 ],
               },
             ],
@@ -293,34 +284,29 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
         margin: [0, 20, 0, 30] as [number, number, number, number],
       },
 
-      // Datos de pago
-      factura.sociedad.iban
+      // Condiciones
+      presupuesto.condiciones
         ? {
             stack: [
-              { text: 'FORMA DE PAGO', style: 'sectionLabel' },
-              { text: 'Transferencia bancaria', margin: [0, 5, 0, 0] as [number, number, number, number] },
-              {
-                text: `IBAN: ${factura.sociedad.iban}`,
-                style: 'ibanText',
-                margin: [0, 5, 0, 0] as [number, number, number, number],
-              },
+              { text: 'CONDICIONES', style: 'sectionLabel' },
+              { text: presupuesto.condiciones, margin: [0, 5, 0, 0] as [number, number, number, number], color: '#374151' },
             ],
             margin: [0, 0, 0, 20] as [number, number, number, number],
           }
         : null,
 
       // Notas
-      factura.notas
+      presupuesto.notas
         ? {
             stack: [
               { text: 'OBSERVACIONES', style: 'sectionLabel' },
-              { text: factura.notas, margin: [0, 5, 0, 0] as [number, number, number, number], color: '#6b7280' },
+              { text: presupuesto.notas, margin: [0, 5, 0, 0] as [number, number, number, number], color: '#6b7280' },
             ],
           }
         : null,
 
       // Cláusula de protección de datos
-      factura.sociedad.clausulaProteccionDatos
+      presupuesto.sociedad.clausulaProteccionDatos
         ? {
             stack: [
               {
@@ -330,7 +316,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
                 margin: [0, 20, 0, 10] as [number, number, number, number],
               },
               { text: 'PROTECCIÓN DE DATOS', fontSize: 7, bold: true, color: '#9ca3af', margin: [0, 0, 0, 3] as [number, number, number, number] },
-              { text: factura.sociedad.clausulaProteccionDatos, fontSize: 7, color: '#9ca3af', lineHeight: 1.3 },
+              { text: presupuesto.sociedad.clausulaProteccionDatos, fontSize: 7, color: '#9ca3af', lineHeight: 1.3 },
             ],
           }
         : null,
@@ -350,7 +336,7 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
       invoiceTitle: {
         fontSize: 24,
         bold: true,
-        color: '#2563eb',
+        color: '#009680',
         alignment: 'right',
       },
       invoiceNumber: {
@@ -413,11 +399,6 @@ export async function generarFacturaPDF(factura: FacturaData): Promise<Buffer> {
         bold: true,
         color: '#1f2937',
         alignment: 'right',
-      },
-      ibanText: {
-        fontSize: 11,
-        font: 'Roboto',
-        color: '#1f2937',
       },
     },
   }
