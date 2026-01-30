@@ -44,6 +44,7 @@ export async function guardarCliente(id: number | undefined, formData: FormData)
     }
 
     revalidatePath('/clientes')
+    revalidatePath('/')
 
     return { success: true }
   } catch (error) {
@@ -83,6 +84,7 @@ export async function eliminarCliente(id: number) {
     })
 
     revalidatePath('/clientes')
+    revalidatePath('/')
 
     return { success: true }
   } catch (error) {

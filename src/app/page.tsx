@@ -4,6 +4,8 @@ import { Button, Card } from '@/components/ui'
 import FinancePanel from './FinancePanel'
 import MetricsChart from './MetricsChart'
 
+export const dynamic = 'force-dynamic'
+
 const MONTH_NAMES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
 
 async function getStats() {
